@@ -3,61 +3,70 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// C'est le script concernant l'ennemi
-
-public class Player : MonoBehaviour
+public class Gobelin : MonoBehaviour
 {
-    // établissement de/des variables
+  public Transform target;
+  public int maxHealth = 100;
+  public int currentHealth;
+  public float attackRepeatTime = 1;
+  public HealthBar healthBar;
+  private Animator anim;
+  private float attackTime;
+  public int Dammage;
 
-    public int maxHealth = 100;
-    public int currentHealth;
+  void Start()
+  {
+    anim = gameObject.GetComponent<Animator>();
+    currentHealth = maxHealth;
+    healthBar.SetMaxHealth(maxHealth);
+    attackTime = Time.time;
+  }
 
-    public HealthBar healthBar;
-    public bool attack = false;
+  void Update()
+  {
 
-    public Transform target;
-    public float speed = 0f;
-    Rigidbody rig;
-    public bool start = true;
-
-    void Start()
+    target = GameObject.FindGameObjectWithTag("Player").transform;
+    attack();
+    if (currentHealth < 0)
     {
-        currentHealth = maxHealth;
-        healthBar.SetMaxHealth(maxHealth);
-        rig = GetComponent<Rigidbody>();
+      SceneManager.LoadScene("Victory");
+      Cursor.lockState = CursorLockMode.None;
+      Cursor.visible = true;
     }
+  }
 
-    void Update()
+
+  // Programme qui détecte si l'épée fais son animation + entre en contact avec le joueur
+
+  //   private void OnTriggerEnter(Collider other)
+  //   {
+  //     if (attack == true)
+  //     {
+  //       if (other.tag == "Melee")
+  //       {
+  //         TakeDamage(10);
+  //       }
+
+  //     }
+  //   }
+
+  // programme qui actualise les dégâts
+
+  void TakeDamage(int damage)
+  {
+    currentHealth -= damage;
+    healthBar.SetHealth(currentHealth);
+
+  }
+
+  void attack()
+  {
+    if (Time.time > attackTime)
     {
-        if (currentHealth < 0)
-        {
-            SceneManager.LoadScene("Victory");
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-
-        }
+      anim.Play("Attack");
+      target.GetComponent<Player>().TakeDamage(Dammage);
+      // Debug.Log("attack" + Dammage + "damage");
+      attackTime = Time.time + attackRepeatTime;
     }
-
-    
-// Programme qui détecte si l'épée fais son animation + entre en contact avec le joueur
-
-    private void OnTriggerEnter(Collider other)
-    {
-        start = false;
-        if (attack == true)
-        {
-            if (other.tag == "Hit1"){
-                TakeDamage(10);
-            }
-        }
-
-    }
-    
-// programme qui actualise les dégâts
-
-    void TakeDamage(int damage)
-    {
-        currentHealth -= damage;
-        healthBar.SetHealth(currentHealth);
-    }
+  }
 }

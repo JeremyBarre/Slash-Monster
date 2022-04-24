@@ -4,22 +4,22 @@ using UnityEngine;
 
 public class Defense : MonoBehaviour
 {
-    // établissement de/des variables
+  // établissement de/des variables
 
-    Animator anim;
+  private Animator anim;
 
-    // Ce programme permet juste de lancer l'animation de la défense (mouvement du bouclier)
+  // Ce programme permet juste de lancer l'animation de la défense (mouvement du bouclier)
 
-    private void Start()
-    {
-        anim = GetComponent<Animator>();
-    }
+  private void Start()
+  {
+    anim = GetComponent<Animator>();
+  }
 
-    private void Update()
-    {
-        if (Input.GetButtonDown("Fire2"))
-            anim.SetBool("Defending", true);
-        else if (Input.GetButtonUp("Fire2"))
-            anim.SetBool("Defending", false);
-    }
+  private void Update()
+  {
+    // if (Input.GetButtonDown("Fire2"))
+    //   anim.SetBool("Defending", true);
+    // else if (Input.GetButtonUp("Fire2"))
+    //   anim.SetBool("Defending", false);
+  }
 }
